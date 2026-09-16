@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Прогулянка? 🐱</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe4ec 45%, #ffd1e0 100%);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.5;
+      z-index: 0;
+    }
+    .blob1 { width: 300px; height: 300px; background: #ffb6c1; top: -100px; left: -80px; }
+    .blob2 { width: 250px; height: 250px; background: #ffc0cb; bottom: -80px; right: -60px; }
+    .blob3 { width: 200px; height: 200px; background: #ff9eb5; top: 35%; left: 75%; }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      padding: 48px 36px 40px;
+      border-radius: 36px;
+      box-shadow: 0 25px 60px -15px rgba(255, 105, 180, 0.25);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      animation: appear 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      border: 2px solid rgba(255, 182, 193, 0.5);
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .bow {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #d63384;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    p {
+      color: #9d4e6c;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    #yes {
+      background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+    }
+
+    #yes:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 28px rgba(255, 107, 157, 0.5);
+    }
+
+    #no {
+      background: #fff0f5;
+      color: #c9184a;
+      border: 2px solid #ffb3c6;
+      min-width: 140px;
+    }
+
+    #no:hover {
+      background: #ffe4ec;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 182, 193, 0.4);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 36px 30px;
+      border-radius: 28px;
+      text-align: center;
+      max-width: 340px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(255, 105, 180, 0.3);
+      animation: appear 0.4s ease;
+      border: 2px solid #ffb6c1;
+    }
+
+    .modal-content h2 {
+      color: #d63384;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .modal-content p {
+      color: #9d4e6c;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .time-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .time-btn {
+      padding: 12px 20px;
+      background: #fff0f5;
+      border: 2px solid #ffb3c6;
+      border-radius: 50px;
+      color: #c9184a;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .time-btn:hover {
+      background: #ff6b9d;
+      color: white;
+      border-color: #ff6b9d;
+      transform: scale(1.05);
+    }
+
+    .final-message {
+      display: none;
+      margin-top: 16px;
+      font-size: 17px;
+      color: #d63384;
+      font-weight: 600;
+    }
+
+    .flying {
+      position: fixed;
+      font-size: 24px;
+      pointer-events: none;
+      animation: fly 2s ease-out forwards;
+      z-index: 200;
+    }
+
+    @keyframes fly {
+      0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(-150px) scale(1.5) rotate(20deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <div class="card">
+    <span class="bow">🎀</span>
+    <h1>Радий тебе бачити тут! <img src="https://i.pinimg.com/736x/86/dc/2a/86dc2a9c65962c82e212ba530da2780a.jpg" width="40"></h1>
+    <p>
+      Мені б дуже хотілося трохи провести з тобою час сьогодні. 
+      Тому пропоную зустрітися сьогодні ввечері<br>
+      на невелику прогулянку.<br><br>
+      Буде дуже мило, якщо ти погодишся.
+    </p>
+
+    <div class="buttons">
+      <button id="yes">А що тут думати?</button>
+      <button id="no">Ні</button>
+    </div>
+  </div>
+
+  <!-- Віконце вибору часу -->
+  <div class="modal" id="timeModal">
+    <div class="modal-content">
+      <h2>О котрій зустрінемось? ⏰</h2>
+      <p>Обери зручний час</p>
+      
+      <div class="time-buttons">
+        <button class="time-btn" data-time="18:00">18:00</button>
+        <button class="time-btn" data-time="19:00">19:00</button>
+        <button class="time-btn" data-time="20:00">20:00</button>
+        <button class="time-btn" data-time="21:00">21:00</button>
+      </div>
+
+      <div class="final-message" id="finalMsg">
+        Ура! Вона обрала час для прогулянки!🎉<br>
+        Тоді чекаю тебе о <span id="chosenTime"></span> 💕
+      </div>
+    </div>
+  </div>
+
+  <!-- Форма для пошти -->
+  <form id="emailForm" action="https://formspree.io/f/mwlpeang" method="POST" style="display: none;">
+    <input type="text" name="time" id="timeInput">
+    <input type="text" name="message" value="Ура! Вона обрала час для прогулянки!">
+  </form>
+
+  <script>
+    const yesBtn = document.getElementById('yes');
+    const noBtn = document.getElementById('no');
+    const modal = document.getElementById('timeModal');
+    const finalMsg = document.getElementById('finalMsg');
+    const chosenTime = document.getElementById('chosenTime');
+    const emailForm = document.getElementById('emailForm');
+    const timeInput = document.getElementById('timeInput');
+
+    // Варіанти тексту для кнопки «Ні»
+    const noTexts = [
+      "Ти впевнена? 🥺",
+      "Ну будь ласка...",
+      "Подумай ще раз 💭",
+      "Не відмовляйся 💕",
+      "Останній шанс!",
+      "Я буду сумувати 😿",
+      "Може все-таки так?",
+      "Ну майже погодилась...",
+      "Давай не будемо сваритись",
+      "Я приготую щось смачне",
+      "Просто коротка прогулянка",
+      "Будь ласка, будь ласка",
+      "Ти ж не серйозно?",
+      "Ну хоча б на півгодинки",
+      "Я дуже сподіваюсь 💗"
+    ];
+
+    // При натисканні на «Ні» — міняємо текст на випадковий
+    noBtn.addEventListener('click', () => {
+      const randomText = noTexts[Math.floor(Math.random() * noTexts.length)];
+      noBtn.textContent = randomText;
+    });
+
+    // При натисканні «Так»
+    yesBtn.addEventListener('click', () => {
+      modal.style.display = 'flex';
+      createHearts(8);
+    });
+
+    // Вибір часу + відправка на пошту
+   // Вибір часу + відправка на пошту
+document.querySelectorAll('.time-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const time = btn.getAttribute('data-time');
+    chosenTime.textContent = time;
+
+    // Прибираємо заголовок і текст
+    document.querySelector('.modal-content h2').style.display = 'none';
+    document.querySelector('.modal-content p').style.display = 'none';
+
+    // Прибираємо кнопки часу
+    document.querySelector('.time-buttons').style.display = 'none';
+
+    // Показуємо фінальне повідомлення
+    finalMsg.style.display = 'block';
+
+    timeInput.value = time;
+
+    // Відправка через AJAX без редиректу
+    const data = new FormData(emailForm);
+
+    fetch("https://formspree.io/f/mwlpeang", {
+      method: "POST",
+      body: data,
+      headers: { "Accept": "application/json" }
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log("Форма відправлена!");
+      } else {
+        console.log("Помилка при відправці!");
+      }
+    })
+    .catch(err => console.error("Помилка:", err));
+
+    createHearts(15);
+  });
+});
+
+
+    function createHearts(count) {
+      const emojis = ['💗', '💕', '💖', '🎀', '🐱', '🌸', '❤️', '🐾'];
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'flying';
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          el.style.left = Math.random() * window.innerWidth + 'px';
+          el.style.top = (window.innerHeight - 30) + 'px';
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 2000);
+        }, i * 80);
+      }
+    }
+  </script>
+</body>
+</html>
